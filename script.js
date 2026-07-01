@@ -156,12 +156,10 @@ const elements = {
   sideLabel: document.querySelector("#sideLabel"),
   cardText: document.querySelector("#cardText"),
   cardCounter: document.querySelector("#cardCounter"),
-  knownCounter: document.querySelector("#knownCounter"),
   prevBtn: document.querySelector("#prevBtn"),
   nextBtn: document.querySelector("#nextBtn"),
   orderedBtn: document.querySelector("#orderedBtn"),
   shuffleBtn: document.querySelector("#shuffleBtn"),
-  knownInput: document.querySelector("#knownInput"),
   ratingButtons: document.querySelector("#ratingButtons"),
   questionInput: document.querySelector("#questionInput"),
   answerInput: document.querySelector("#answerInput"),
@@ -173,7 +171,7 @@ let state = loadState();
 
 function loadState() {
   const fallback = {
-    cards: DEFAULT_CARDS.map((card) => ({ ...card, known: false, rating: 0 })),
+    cards: DEFAULT_CARDS.map((card) => ({ ...card, rating: 0 })),
     order: DEFAULT_CARDS.map((_, index) => index),
     current: 0,
     flipped: false,
@@ -187,7 +185,6 @@ function loadState() {
     const cards = DEFAULT_CARDS.map((defaultCard, index) => ({
       ...defaultCard,
       ...(saved.cards[index] || {}),
-      known: Boolean(saved.cards[index]?.known),
       rating: Number(saved.cards[index]?.rating || 0)
     }));
 
@@ -223,14 +220,11 @@ function currentCard() {
 function render() {
   const card = currentCard();
   const visibleText = state.flipped ? card.answer : card.question;
-  const knownCount = state.cards.filter((item) => item.known).length;
 
   elements.card.classList.toggle("answer", state.flipped);
   elements.sideLabel.textContent = state.flipped ? "Antwort" : "Frage";
   elements.cardText.textContent = visibleText;
   elements.cardCounter.textContent = `${state.current + 1} / ${state.cards.length}`;
-  elements.knownCounter.textContent = `${knownCount} gelernt`;
-  elements.knownInput.checked = card.known;
   elements.questionInput.value = card.question;
   elements.answerInput.value = card.answer;
   elements.orderedBtn.classList.toggle("active", state.mode === "ordered");
@@ -306,12 +300,6 @@ elements.prevBtn.addEventListener("click", () => moveBy(-1));
 elements.nextBtn.addEventListener("click", () => moveBy(1));
 elements.shuffleBtn.addEventListener("click", shuffleOrder);
 elements.orderedBtn.addEventListener("click", setOrderedMode);
-
-elements.knownInput.addEventListener("change", () => {
-  currentCard().known = elements.knownInput.checked;
-  saveState();
-  render();
-});
 
 elements.questionInput.addEventListener("input", (event) => {
   updateCardField("question", event.target.value);

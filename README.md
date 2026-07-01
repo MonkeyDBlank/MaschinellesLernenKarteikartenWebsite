@@ -8,7 +8,7 @@ Einfache statische Karteikarten-Website für die Theoriefragen aus `theoriefrage
 - Vor/Zurück-Navigation
 - Normale Reihenfolge oder zufällige Shuffle-Reihenfolge
 - Frage und Antwort direkt im Browser bearbeiten
-- "Kann ich"-Haken und Bewertung von 1 bis 5
+- Bewertung von 1 bis 5
 - Speicherung ohne externe Datenbank über `localStorage`
 - Läuft als statische Website auf Vercel
 
