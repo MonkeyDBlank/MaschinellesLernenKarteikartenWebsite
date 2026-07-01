@@ -5,6 +5,7 @@ Einfache statische Karteikarten-Website für die Theoriefragen aus `theoriefrage
 ## Features
 
 - Frage per Klick umdrehen und Antwort anzeigen
+- Alternative Kurzantwort auf der Antwortseite einblendbar
 - Vor/Zurück-Navigation
 - Normale Reihenfolge oder Random-Modus, bei dem die Pfeile zufällige Karten wählen
 - Frage und Antwort direkt im Browser bearbeiten

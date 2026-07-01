@@ -149,10 +149,51 @@ const DEFAULT_CARDS = [
   }
 ];
 
+const ALTERNATIVE_ANSWERS = [
+  "Man bringt dem Modell mit alten Beispielen bei, welche Klasse zu welchem Objekt gehört. Danach soll es neue Fälle richtig einsortieren.",
+  "Bei Regression kommt eine Zahl raus, bei Klassifikation eine Kategorie. Also eher 'wie viel?' statt 'welche Klasse?'.",
+  "Hier darf man die Reihenfolge nicht ignorieren. Frühere Werte können spätere beeinflussen, deshalb schaut man auf Verlauf, Trend und Muster über die Zeit.",
+  "kNN nutzt Nähe über Distanzen. SVM trennt Klassen über Optimierung. Naive Bayes rechnet mit Wahrscheinlichkeiten und Bayes.",
+  "Erst Daten brauchbar machen, dann Modell trainieren, danach Ergebnis testen und einsetzen. Ohne saubere Daten bringt das beste Modell wenig.",
+  "kNN muss beim Vorhersagen viele Abstände rechnen und die Trainingsdaten behalten. Dadurch wird es bei großen Daten langsam und speicherlastig.",
+  "Man erlaubt Fehler mit Soft Margin und nutzt Kernel, damit eine nichtlineare Trennung möglich wird. So bleibt die SVM flexibel.",
+  "Man baut mehrere binäre SVMs, zum Beispiel jede Klasse gegen den Rest. Am Ende gewinnt die Klasse mit dem stärksten Ergebnis.",
+  "Testdaten müssen wirklich unbekannt bleiben. Wenn sie schon ins Training einfließen, bewertet man sich selbst zu gut.",
+  "Man teilt die Daten in n Teile. Jeder Teil ist einmal Testset, der Rest Training. Danach nimmt man den Durchschnitt der Ergebnisse.",
+  "Die Klassenanteile sollen in den Splits ungefähr gleich bleiben. Sonst testet man vielleicht auf einer verzerrten Datenmenge.",
+  "Beim Ziehen mit Zurücklegen werden manche Beispiele mehrfach gezogen und manche gar nicht. Die nicht gezogenen nutzt man als Testfälle.",
+  "Precision sagt: Von meinen positiven Vorhersagen, wie viele stimmen? Recall sagt: Von allen echten Positiven, wie viele habe ich gefunden?",
+  "Ich würde nicht selbst alles neu programmieren, sondern eine fertige Library nehmen, SQL-Daten exportieren oder anbinden und schnell einen Prototyp testen.",
+  "k-Means sucht Gruppen ähnlicher Punkte. PCA fasst Daten in weniger Dimensionen zusammen, ohne möglichst viel Information zu verlieren.",
+  "Web: Seite linkt auf Seite. Paper: Paper zitiert Paper. Social: Nutzer folgt Nutzer. Daraus entsteht jeweils ein gerichteter Graph.",
+  "Man trainiert viele Modelle auf leicht anderen Stichproben und lässt sie zusammen entscheiden. Dadurch wird das Ergebnis stabiler.",
+  "Entweder macht man aus Zahlen Klassenbereiche oder man nimmt eine Verteilung wie Normalverteilung an. Dann kann Bayes trotzdem rechnen.",
+  "Man misst für jeden Punkt, wie weit er vom eigenen Clusterzentrum weg ist, quadriert das und summiert alles auf. Weniger ist besser.",
+  "Man startet k-Means oft mit verschiedenen Startzentren und nimmt die Variante mit kleinster SSE. Praktisch ist das der normale Weg.",
+  "Ein SVM-Feature kann ein normaler Zahlenwert sein. Wichtig ist eher, dass die Werte sinnvoll skaliert sind.",
+  "Man setzt den Punkt in w^T x + b ein. Das Vorzeichen entscheidet dann, ob er zur positiven oder negativen Klasse gehört.",
+  "Training sieht super aus, Validierung aber deutlich schlechter. Dann hat das Modell zu viel auswendig gelernt.",
+  "Die Loss-Funktion ist der Fehlerwert fürs Netz. Backpropagation versucht genau diesen Wert kleiner zu machen.",
+  "Mehrere Klassifikatoren lernen auf Bootstrap-Daten. Bei einer neuen Eingabe wird abgestimmt, welche Klasse rauskommt.",
+  "Das Modell ist zu simpel oder lernt zu wenig. Also komplexer machen, bessere Features nutzen oder weniger stark regularisieren.",
+  "Das Modell muss weniger auswendig lernen: mehr Daten, einfacheres Modell, Regularisierung, Dropout oder Early Stopping.",
+  "Ein Perzeptron nimmt Eingaben, gewichtet sie, addiert Bias und schickt das Ergebnis durch eine Aktivierung. Daraus entsteht die Ausgabe.",
+  "XOR geht mit einer kleinen versteckten Schicht: erst logische Teilfunktionen wie OR und NAND bauen, dann mit AND kombinieren.",
+  "Man hört auf zu trainieren, wenn die Validierungsleistung nicht mehr besser wird. So stoppt man, bevor das Netz überlernt.",
+  "Zwischen n1 und n2 gibt es n1*n2 Gewichte plus n2 Biases, zwischen n2 und n3 nochmal n2*n3 plus n3 Biases.",
+  "Man trainiert mit immer mehr Daten und plottet Trainings- und Validierungsfehler. Daraus sieht man, ob mehr Daten oder ein anderes Modell helfen.",
+  "Die Matrix zählt TP, FP, TN und FN. Sensitivity ist TP geteilt durch alle echten Positiven, also TP/(TP+FN).",
+  "Man probiert mehrere k aus und schaut auf die SSE-Kurve. Beim Knick bringt mehr k kaum noch Verbesserung.",
+  "Man sucht die Parameter, bei denen die gesehenen Daten am plausibelsten sind. Genau das meint argmax über P(D|Θ).",
+  "Random Forest ist Bagging mit vielen Entscheidungsbäumen. Bei jedem Split wird nur ein zufälliger Teil der Features betrachtet.",
+  "Bootstrap heißt: Aus n Datenpunkten n-mal mit Zurücklegen ziehen. Dadurch entstehen Trainingssets mit Dopplungen und Lücken."
+];
+
 const STORAGE_KEY = "ml-flashcards-v1";
 
 const elements = {
   card: document.querySelector("#card"),
+  alternativeBtn: document.querySelector("#alternativeBtn"),
   sideLabel: document.querySelector("#sideLabel"),
   cardText: document.querySelector("#cardText"),
   cardCounter: document.querySelector("#cardCounter"),
@@ -171,10 +212,15 @@ let state = loadState();
 
 function loadState() {
   const fallback = {
-    cards: DEFAULT_CARDS.map((card) => ({ ...card, rating: 0 })),
+    cards: DEFAULT_CARDS.map((card, index) => ({
+      ...card,
+      alternativeAnswer: ALTERNATIVE_ANSWERS[index],
+      rating: 0
+    })),
     order: DEFAULT_CARDS.map((_, index) => index),
     current: 0,
     flipped: false,
+    alternative: false,
     mode: "ordered"
   };
 
@@ -184,6 +230,7 @@ function loadState() {
 
     const cards = DEFAULT_CARDS.map((defaultCard, index) => ({
       ...defaultCard,
+      alternativeAnswer: ALTERNATIVE_ANSWERS[index],
       ...(saved.cards[index] || {}),
       rating: Number(saved.cards[index]?.rating || 0)
     }));
@@ -219,10 +266,13 @@ function currentCard() {
 
 function render() {
   const card = currentCard();
-  const visibleText = state.flipped ? card.answer : card.question;
+  const visibleText = state.flipped
+    ? state.alternative ? card.alternativeAnswer : card.answer
+    : card.question;
 
   elements.card.classList.toggle("answer", state.flipped);
   elements.sideLabel.textContent = state.flipped ? "Antwort" : "Frage";
+  elements.alternativeBtn.textContent = state.alternative ? "Normale Antwort" : "Alternative Antwort";
   elements.cardText.textContent = visibleText;
   elements.cardCounter.textContent = `${state.current + 1} / ${state.cards.length}`;
   elements.questionInput.value = card.question;
@@ -263,6 +313,7 @@ function moveBy(step) {
     state.current = (state.current + step + state.order.length) % state.order.length;
   }
   state.flipped = false;
+  state.alternative = false;
   saveState();
   render();
 }
@@ -273,6 +324,7 @@ function setShuffleMode() {
   state.current = activeCard;
   state.mode = "shuffle";
   state.flipped = false;
+  state.alternative = false;
   saveState("Random-Modus gespeichert.");
   render();
 }
@@ -283,6 +335,7 @@ function setOrderedMode() {
   state.current = Math.max(0, activeCard);
   state.mode = "ordered";
   state.flipped = false;
+  state.alternative = false;
   saveState("Normale Reihenfolge gespeichert.");
   render();
 }
@@ -290,13 +343,30 @@ function setOrderedMode() {
 function updateCardField(field, value) {
   currentCard()[field] = value;
   saveState();
-  if ((field === "question" && !state.flipped) || (field === "answer" && state.flipped)) {
+  if ((field === "question" && !state.flipped) || (field === "answer" && state.flipped && !state.alternative)) {
     elements.cardText.textContent = value;
   }
 }
 
-elements.card.addEventListener("click", () => {
+function flipCard() {
   state.flipped = !state.flipped;
+  state.alternative = false;
+  saveState();
+  render();
+}
+
+elements.card.addEventListener("click", flipCard);
+
+elements.card.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  event.preventDefault();
+  event.stopPropagation();
+  flipCard();
+});
+
+elements.alternativeBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
+  state.alternative = !state.alternative;
   saveState();
   render();
 });
@@ -315,7 +385,7 @@ elements.answerInput.addEventListener("input", (event) => {
 });
 
 elements.resetBtn.addEventListener("click", () => {
-  const confirmed = window.confirm("Alle Bearbeitungen, Haken und Bewertungen lokal zurücksetzen?");
+  const confirmed = window.confirm("Alle Bearbeitungen und Bewertungen lokal zurücksetzen?");
   if (!confirmed) return;
   localStorage.removeItem(STORAGE_KEY);
   state = loadState();
@@ -328,9 +398,7 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") moveBy(1);
   if (event.key === " ") {
     event.preventDefault();
-    state.flipped = !state.flipped;
-    saveState();
-    render();
+    flipCard();
   }
 });
 
