@@ -1,0 +1,23 @@
+# ML Karteikarten
+
+Einfache statische Karteikarten-Website für die Theoriefragen aus `theoriefragen.pdf`.
+
+## Features
+
+- Frage per Klick umdrehen und Antwort anzeigen
+- Vor/Zurück-Navigation
+- Normale Reihenfolge oder zufällige Shuffle-Reihenfolge
+- Frage und Antwort direkt im Browser bearbeiten
+- "Kann ich"-Haken und Bewertung von 1 bis 5
+- Speicherung ohne externe Datenbank über `localStorage`
+- Läuft als statische Website auf Vercel
+
+## Lokal öffnen
+
+Die Seite kann direkt über `index.html` geöffnet werden. Für einen kleinen lokalen Server:
+
+```bash
+python3 -m http.server 5173
+```
+
+Dann im Browser `http://localhost:5173` öffnen.

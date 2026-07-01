@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ML Karteikarten</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="meme-layer" aria-hidden="true">
+      <span>Tung Tung Tung Sahur</span>
+      <span>ML Klausur Arc</span>
+      <span>Confusion Matrix Moment</span>
+      <span>kNN sucht noch</span>
+      <span>Overfitting detected</span>
+      <span>Bootstrap Energy</span>
+      <span>SVM macht Grenze</span>
+      <span>Random Forest Vibes</span>
+    </div>
+
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Maschinelles Lernen</p>
+          <h1>Karteikarten</h1>
+        </div>
+        <div class="stats">
+          <span id="cardCounter">1 / 1</span>
+          <span id="knownCounter">0 gelernt</span>
+        </div>
+      </header>
+
+      <section class="controls" aria-label="Navigation und Modus">
+        <button id="prevBtn" type="button">Zurück</button>
+        <div class="mode-switch" role="group" aria-label="Reihenfolge">
+          <button id="orderedBtn" type="button" class="active">Reihenfolge</button>
+          <button id="shuffleBtn" type="button">Random</button>
+        </div>
+        <button id="nextBtn" type="button">Weiter</button>
+      </section>
+
+      <section class="study-area">
+        <button id="card" class="flashcard" type="button" aria-label="Karte umdrehen">
+          <span id="sideLabel" class="side-label">Frage</span>
+          <span id="cardText" class="card-text"></span>
+        </button>
+      </section>
+
+      <section class="meta-panel" aria-label="Lernstatus">
+        <label class="known-toggle">
+          <input id="knownInput" type="checkbox" />
+          <span>Kann ich</span>
+        </label>
+
+        <div class="rating" aria-label="Bewertung von 1 bis 5">
+          <span>Skala</span>
+          <div id="ratingButtons" class="rating-buttons"></div>
+        </div>
+      </section>
+
+      <section class="edit-panel">
+        <div class="edit-header">
+          <h2>Karte bearbeiten</h2>
+          <button id="resetBtn" type="button">Defaults zurücksetzen</button>
+        </div>
+        <label>
+          Frage
+          <textarea id="questionInput" rows="4"></textarea>
+        </label>
+        <label>
+          Antwort
+          <textarea id="answerInput" rows="5"></textarea>
+        </label>
+        <p id="saveState" class="save-state" role="status">Gespeichert im Browser-Cache.</p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
