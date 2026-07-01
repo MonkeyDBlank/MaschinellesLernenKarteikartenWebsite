@@ -6,7 +6,7 @@ Einfache statische Karteikarten-Website für die Theoriefragen aus `theoriefrage
 
 - Frage per Klick umdrehen und Antwort anzeigen
 - Vor/Zurück-Navigation
-- Normale Reihenfolge oder zufällige Shuffle-Reihenfolge
+- Normale Reihenfolge oder Random-Modus, bei dem die Pfeile zufällige Karten wählen
 - Frage und Antwort direkt im Browser bearbeiten
 - Bewertung von 1 bis 5
 - Speicherung ohne externe Datenbank über `localStorage`

@@ -251,24 +251,29 @@ function renderRating(activeRating) {
 }
 
 function moveBy(step) {
-  state.current = (state.current + step + state.order.length) % state.order.length;
+  if (state.mode === "shuffle") {
+    const activeCard = currentCardIndex();
+    let nextCard = activeCard;
+    while (nextCard === activeCard && state.cards.length > 1) {
+      nextCard = Math.floor(Math.random() * state.cards.length);
+    }
+    state.order = DEFAULT_CARDS.map((_, index) => index);
+    state.current = nextCard;
+  } else {
+    state.current = (state.current + step + state.order.length) % state.order.length;
+  }
   state.flipped = false;
   saveState();
   render();
 }
 
-function shuffleOrder() {
+function setShuffleMode() {
   const activeCard = currentCardIndex();
-  const order = DEFAULT_CARDS.map((_, index) => index);
-  for (let i = order.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [order[i], order[j]] = [order[j], order[i]];
-  }
-  state.order = order;
-  state.current = Math.max(0, state.order.indexOf(activeCard));
+  state.order = DEFAULT_CARDS.map((_, index) => index);
+  state.current = activeCard;
   state.mode = "shuffle";
   state.flipped = false;
-  saveState("Random-Reihenfolge gespeichert.");
+  saveState("Random-Modus gespeichert.");
   render();
 }
 
@@ -298,7 +303,7 @@ elements.card.addEventListener("click", () => {
 
 elements.prevBtn.addEventListener("click", () => moveBy(-1));
 elements.nextBtn.addEventListener("click", () => moveBy(1));
-elements.shuffleBtn.addEventListener("click", shuffleOrder);
+elements.shuffleBtn.addEventListener("click", setShuffleMode);
 elements.orderedBtn.addEventListener("click", setOrderedMode);
 
 elements.questionInput.addEventListener("input", (event) => {
