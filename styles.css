@@ -28,6 +28,10 @@ body {
   overflow-x: hidden;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 button,
 textarea,
 input {
@@ -396,9 +400,10 @@ input:focus-visible {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 14px;
   width: min(760px, 100%);
-  max-height: min(82vh, 760px);
+  height: min(82vh, 760px);
   overflow: hidden;
   padding: 18px;
   border: 1px solid var(--line);
@@ -433,7 +438,10 @@ input:focus-visible {
 }
 
 .table-wrap {
+  min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--line);
   border-radius: 8px;
 }
@@ -542,7 +550,7 @@ tr:last-child td {
   }
 
   .modal-panel {
-    max-height: 88vh;
+    height: 88vh;
     padding: 14px;
   }
 

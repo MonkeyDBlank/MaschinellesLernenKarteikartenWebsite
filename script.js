@@ -351,12 +351,14 @@ function renderStatsTable() {
 function openStatsModal() {
   elements.statsModal.classList.add("open");
   elements.statsModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
   elements.closeStatsBtn.focus();
 }
 
 function closeStatsModal() {
   elements.statsModal.classList.remove("open");
   elements.statsModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
   elements.statsBtn.focus();
 }
 
