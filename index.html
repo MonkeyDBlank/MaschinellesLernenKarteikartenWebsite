@@ -25,6 +25,7 @@
           <h1>Karteikarten</h1>
         </div>
         <div class="stats">
+          <button id="statsBtn" class="stats-btn" type="button">Statistik</button>
           <span id="cardCounter">1 / 1</span>
         </div>
       </header>
@@ -72,6 +73,35 @@
         <p id="saveState" class="save-state" role="status">Gespeichert im Browser-Cache.</p>
       </section>
     </main>
+
+    <div id="statsModal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal></div>
+      <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="statsTitle">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Altklausuren-Auswertung</p>
+            <h2 id="statsTitle">Fragen- und Aufgabenverteilung</h2>
+          </div>
+          <button id="closeStatsBtn" class="close-btn" type="button" aria-label="Statistik schließen">×</button>
+        </div>
+        <p class="modal-note">
+          Fragen = Theorie, Nennen, Beschreiben, Erklären. Aufgaben = Rechnen, Zeichnen oder Anwendung auf Tabellen/Diagramme.
+          Die Prozentwerte basieren auf Punkten pro Klausur.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Klausur</th>
+                <th>Fragen</th>
+                <th>Aufgaben</th>
+              </tr>
+            </thead>
+            <tbody id="statsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
     <script src="script.js"></script>
   </body>

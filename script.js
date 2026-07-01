@@ -196,6 +196,26 @@ const OCCURRENCE_COUNTS = [
 
 const EXAM_COUNT = 17;
 
+const EXAM_STATS = [
+  { exam: "DM_SS11", questions: 59.1, tasks: 40.9 },
+  { exam: "DM_SS12", questions: 74.7, tasks: 25.3 },
+  { exam: "DM_SS18", questions: 62.8, tasks: 37.2 },
+  { exam: "DM_SS19", questions: 48.3, tasks: 51.7 },
+  { exam: "DM_SS20", questions: 42.2, tasks: 57.8 },
+  { exam: "DM_SS21", questions: 47.5, tasks: 52.5 },
+  { exam: "DM_SS22", questions: 51.7, tasks: 48.3 },
+  { exam: "DM_SS23", questions: 65.0, tasks: 35.0 },
+  { exam: "DM_SS25", questions: 63.3, tasks: 36.7 },
+  { exam: "DM_WS1112", questions: 77.5, tasks: 22.5 },
+  { exam: "DM_WS1819", questions: 54.7, tasks: 45.3 },
+  { exam: "DM_WS1920", questions: 42.2, tasks: 57.8 },
+  { exam: "DM_WS2021", questions: 46.7, tasks: 53.3 },
+  { exam: "DM_WS2223", questions: 63.9, tasks: 36.1 },
+  { exam: "DM_WS2324", questions: 65.0, tasks: 35.0 },
+  { exam: "DM_WS2425", questions: 65.0, tasks: 35.0 },
+  { exam: "DM_WS2526_Bachelor", questions: 63.3, tasks: 36.7 }
+];
+
 const STORAGE_KEY = "ml-flashcards-v1";
 
 const elements = {
@@ -205,6 +225,10 @@ const elements = {
   frequencyBadge: document.querySelector("#frequencyBadge"),
   cardText: document.querySelector("#cardText"),
   cardCounter: document.querySelector("#cardCounter"),
+  statsBtn: document.querySelector("#statsBtn"),
+  statsModal: document.querySelector("#statsModal"),
+  closeStatsBtn: document.querySelector("#closeStatsBtn"),
+  statsTableBody: document.querySelector("#statsTableBody"),
   prevBtn: document.querySelector("#prevBtn"),
   nextBtn: document.querySelector("#nextBtn"),
   orderedBtn: document.querySelector("#orderedBtn"),
@@ -311,6 +335,31 @@ function renderRating(activeRating) {
   }
 }
 
+function renderStatsTable() {
+  elements.statsTableBody.innerHTML = "";
+  EXAM_STATS.forEach((item) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${item.exam}</td>
+      <td>${item.questions.toFixed(1)}%</td>
+      <td>${item.tasks.toFixed(1)}%</td>
+    `;
+    elements.statsTableBody.append(row);
+  });
+}
+
+function openStatsModal() {
+  elements.statsModal.classList.add("open");
+  elements.statsModal.setAttribute("aria-hidden", "false");
+  elements.closeStatsBtn.focus();
+}
+
+function closeStatsModal() {
+  elements.statsModal.classList.remove("open");
+  elements.statsModal.setAttribute("aria-hidden", "true");
+  elements.statsBtn.focus();
+}
+
 function moveBy(step) {
   if (state.mode === "shuffle") {
     const activeCard = currentCardIndex();
@@ -386,6 +435,11 @@ elements.prevBtn.addEventListener("click", () => moveBy(-1));
 elements.nextBtn.addEventListener("click", () => moveBy(1));
 elements.shuffleBtn.addEventListener("click", setShuffleMode);
 elements.orderedBtn.addEventListener("click", setOrderedMode);
+elements.statsBtn.addEventListener("click", openStatsModal);
+elements.closeStatsBtn.addEventListener("click", closeStatsModal);
+elements.statsModal.addEventListener("click", (event) => {
+  if (event.target.hasAttribute("data-close-modal")) closeStatsModal();
+});
 
 elements.questionInput.addEventListener("input", (event) => {
   updateCardField("question", event.target.value);
@@ -404,6 +458,10 @@ elements.resetBtn.addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && elements.statsModal.classList.contains("open")) {
+    closeStatsModal();
+    return;
+  }
   if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
   if (event.key === "ArrowLeft") moveBy(-1);
   if (event.key === "ArrowRight") moveBy(1);
@@ -413,4 +471,5 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+renderStatsTable();
 render();
