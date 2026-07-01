@@ -6,6 +6,7 @@ Einfache statische Karteikarten-Website für die Theoriefragen aus `theoriefrage
 
 - Frage per Klick umdrehen und Antwort anzeigen
 - Alternative Kurzantwort auf der Antwortseite einblendbar
+- Häufigkeit der Frage in den 17 Altklausuren direkt auf der Karte
 - Vor/Zurück-Navigation
 - Normale Reihenfolge oder Random-Modus, bei dem die Pfeile zufällige Karten wählen
 - Frage und Antwort direkt im Browser bearbeiten

@@ -189,12 +189,20 @@ const ALTERNATIVE_ANSWERS = [
   "Bootstrap heißt: Aus n Datenpunkten n-mal mit Zurücklegen ziehen. Dadurch entstehen Trainingssets mit Dopplungen und Lücken."
 ];
 
+const OCCURRENCE_COUNTS = [
+  9, 5, 1, 4, 17, 4, 3, 5, 9, 8, 5, 6, 2, 5, 2, 1, 1, 3, 10,
+  8, 3, 3, 4, 2, 1, 1, 5, 5, 5, 4, 3, 4, 3, 1, 1, 1, 1
+];
+
+const EXAM_COUNT = 17;
+
 const STORAGE_KEY = "ml-flashcards-v1";
 
 const elements = {
   card: document.querySelector("#card"),
   alternativeBtn: document.querySelector("#alternativeBtn"),
   sideLabel: document.querySelector("#sideLabel"),
+  frequencyBadge: document.querySelector("#frequencyBadge"),
   cardText: document.querySelector("#cardText"),
   cardCounter: document.querySelector("#cardCounter"),
   prevBtn: document.querySelector("#prevBtn"),
@@ -215,6 +223,7 @@ function loadState() {
     cards: DEFAULT_CARDS.map((card, index) => ({
       ...card,
       alternativeAnswer: ALTERNATIVE_ANSWERS[index],
+      occurrenceCount: OCCURRENCE_COUNTS[index],
       rating: 0
     })),
     order: DEFAULT_CARDS.map((_, index) => index),
@@ -230,8 +239,9 @@ function loadState() {
 
     const cards = DEFAULT_CARDS.map((defaultCard, index) => ({
       ...defaultCard,
-      alternativeAnswer: ALTERNATIVE_ANSWERS[index],
       ...(saved.cards[index] || {}),
+      alternativeAnswer: ALTERNATIVE_ANSWERS[index],
+      occurrenceCount: OCCURRENCE_COUNTS[index],
       rating: Number(saved.cards[index]?.rating || 0)
     }));
 
@@ -272,6 +282,7 @@ function render() {
 
   elements.card.classList.toggle("answer", state.flipped);
   elements.sideLabel.textContent = state.flipped ? "Antwort" : "Frage";
+  elements.frequencyBadge.textContent = `Klausuren: ${card.occurrenceCount}/${EXAM_COUNT}`;
   elements.alternativeBtn.textContent = state.alternative ? "Normale Antwort" : "Alternative Antwort";
   elements.cardText.textContent = visibleText;
   elements.cardCounter.textContent = `${state.current + 1} / ${state.cards.length}`;
