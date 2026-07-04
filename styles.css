@@ -292,6 +292,38 @@ h2 {
   line-height: 1.22;
 }
 
+.card-details {
+  display: grid;
+  gap: 8px;
+  max-height: 128px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
+  font-size: clamp(0.82rem, 2.2vw, 0.95rem);
+  line-height: 1.35;
+  cursor: default;
+}
+
+.card-details strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ink);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.exam-list,
+.variant-list {
+  display: block;
+}
+
+.variant-block.empty {
+  display: none;
+}
+
 .meta-panel {
   display: flex;
   align-items: center;
@@ -524,6 +556,10 @@ tr:last-child td {
   .flashcard {
     min-height: 340px;
     padding-top: 72px;
+  }
+
+  .card-details {
+    max-height: 150px;
   }
 
   .rating {

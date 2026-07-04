@@ -1,12 +1,13 @@
 # ML Karteikarten
 
-Einfache statische Karteikarten-Website für die Theoriefragen aus `theoriefragen.pdf`.
+Einfache statische Karteikarten-Website für die Theoriefragen aus den Altklausuren.
 
 ## Features
 
 - Frage per Klick umdrehen und Antwort anzeigen
 - Alternative Kurzantwort auf der Antwortseite einblendbar
 - Häufigkeit der Frage in den 17 Altklausuren direkt auf der Karte
+- Klausurenliste und alternative Fragestellungen pro Karte
 - Popup mit Fragen-/Aufgabenverteilung pro Altklausur
 - Vor/Zurück-Navigation
 - Normale Reihenfolge oder Random-Modus, bei dem die Pfeile zufällige Karten wählen
